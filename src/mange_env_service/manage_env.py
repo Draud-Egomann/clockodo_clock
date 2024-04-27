@@ -5,13 +5,10 @@ from save_as_json.save_json import save_json
 import os
 import re
 
-ENV_PATH = os.path.join('configs', '.env')
-
 def env_values():
     return ['API_KEY', 'EMAIL', 'SUBDOMAIN', 'START_STOP_TIMES', 'SERVICES_ID', 'CUSTOMERS_ID']
 
-def check_env_file():
-    env_path = os.path.join('configs', '.env')
+def check_env_file(env_path):
     if not os.path.exists(env_path):
         print("No .env file for Clockodo API found")
         create_env_file(env_path)
@@ -27,8 +24,7 @@ def create_env_file(env_path):
     print("The .env file has been created at:", env_path)
     print("Please fill in the required values.")
 
-def check_env_correctness():
-    env_path = os.path.join('configs', '.env')
+def check_env_correctness(env_path):
     with open(env_path, 'r') as f:
         env = f.read()
 
@@ -61,23 +57,23 @@ def incorrect_env_values(value_matches):
     print("Please fill in the required values in the .env file and run the script again.")
     return
 
-def env_write_customer_service():
+def env_write_customer_service(env_path):
     customer_id = get_customers_from_api()
 
     if customer_id != 0:
-        with open(ENV_PATH, 'r') as f:
+        with open(env_path, 'r') as f:
             env = f.read()
             env = re.sub(r'CUSTOMERS_ID=(\d+)', f'CUSTOMERS_ID={customer_id}', env)
-        with open(ENV_PATH, 'w') as f:
+        with open(env_path, 'w') as f:
             f.write(env)
 
     services_id = get_services_from_api()
 
     if services_id != 0:
-        with open(ENV_PATH, 'r') as f:
+        with open(env_path, 'r') as f:
             env = f.read()
             env = re.sub(r'SERVICES_ID=(\d+)', f'SERVICES_ID={services_id}', env)
-        with open(ENV_PATH, 'w') as f:
+        with open(env_path, 'w') as f:
             f.write(env)
 
 def get_customers_from_api():
