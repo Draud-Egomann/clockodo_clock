@@ -2,7 +2,7 @@ import os
 import re
 
 def env_values():
-    return ['API_KEY', 'EMAIL', 'START_STOP_TIMES', 'SERVICES_ID', 'CUSTOMERS_ID']
+    return ['API_KEY', 'EMAIL', 'SUBDOMAIN', 'START_STOP_TIMES', 'SERVICES_ID', 'CUSTOMERS_ID']
 
 def check_env_file():
     env_path = os.path.join('configs', '.env')
@@ -18,6 +18,7 @@ def create_env_file(env_path):
     with open(env_path, 'w') as f:
         f.write("API_KEY=your_api_key\n")
         f.write("EMAIL=your_email\n")
+        f.write("SUBDOMAIN=my")
         f.write("START_STOP_TIMES=['08:00:00', '17:00:00']\n")
         f.write("SERVICES_ID=your_services_id\n")
         f.write("CUSTOMERS_ID=your_customers_id\n")
@@ -32,11 +33,12 @@ def check_env_correctness():
         # Check if all environment variables are present
         api_key_match = re.search(r'API_KEY=(\w+)', env)
         email_match = re.search(r'EMAIL=(\w+)', env)
+        subdomain_match = re.search(r'SUBDOMAIN=(\w+)', env)
         start_stop_times_match = re.search(r'START_STOP_TIMES=\[(\d{2}:\d{2}:\d{2}), (\d{2}:\d{2}:\d{2})\]', env)
         services_id_match = re.search(r'SERVICES_ID=(\d+)', env)
         customers_id_match = re.search(r'CUSTOMERS_ID=(\d+)', env)
 
-        env_variables = [api_key_match, email_match, start_stop_times_match, services_id_match, customers_id_match]
+        env_variables = [api_key_match, email_match, subdomain_match, start_stop_times_match, services_id_match, customers_id_match]
         env_value_matches = []
 
         for env_var in env_variables:
@@ -52,9 +54,10 @@ def incorrect_env_values(value_matches):
     print("Following values are missing or incorrect in the .env file:")
     for i, value in enumerate(value_matches):
         if not value:
-            print(f"-  {values[i]}")      
-    # if API_KEY and EMAIL are True
-    if value_matches[0] and value_matches[1]:
+            print(f"-  {values[i]}")
+
+    # if API_KEY, EMAIL and SUBDOMAIN are True
+    if value_matches[0] and value_matches[1] and value_matches[2]:
         user_input = input("Do you want to make a request to the Clockodo API to get the ID values of your services and customers? (y/n)")
         if user_input.lower() == 'y':
             # get_ids_from_api()
