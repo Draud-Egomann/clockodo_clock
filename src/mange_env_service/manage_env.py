@@ -1,6 +1,8 @@
 import os
 import re
 
+ENV_PATH = os.path.join('configs', '.env')
+
 def env_values():
     return ['API_KEY', 'EMAIL', 'SUBDOMAIN', 'START_STOP_TIMES', 'SERVICES_ID', 'CUSTOMERS_ID']
 
