@@ -1,3 +1,7 @@
+from clockodo_service.customers import get_customers
+from clockodo_service.services import get_services
+from clockodo_mapping_service.mapping import map_customers
+from save_as_json.save_json import save_json
 import os
 import re
 
@@ -58,17 +62,74 @@ def incorrect_env_values(value_matches):
         if not value:
             print(f"-  {values[i]}")
 
-    # if API_KEY, EMAIL and SUBDOMAIN are True
-    if value_matches[0] and value_matches[1] and value_matches[2]:
-        user_input = input("Do you want to make a request to the Clockodo API to get the ID values of your services and customers? (y/n)")
-        if user_input.lower() == 'y':
-            # get_ids_from_api()
-            print("Request to the Clockodo API made successfully.")
-        return
     print("Please fill in the required values in the .env file and run the script again.")
     return
 
-def get_ids_from_api():
-    # Your logic to make a request to the Clockodo API here
-    print("Request to the Clockodo API made successfully.")
-    return 'your_services_id=123456', 'your_customers_id=123456'
+def env_write_customer_service():
+    customer_id = get_customers_from_api()
+
+    if customer_id != 0:
+        with open(ENV_PATH, 'r') as f:
+            env = f.read()
+            env = re.sub(r'CUSTOMERS_ID=(\d+)', f'CUSTOMERS_ID={customer_id}', env)
+        with open(ENV_PATH, 'w') as f:
+            f.write(env)
+
+    services_id = get_services_from_api()
+
+    if services_id != 0:
+        with open(ENV_PATH, 'r') as f:
+            env = f.read()
+            env = re.sub(r'SERVICES_ID=(\d+)', f'SERVICES_ID={services_id}', env)
+        with open(ENV_PATH, 'w') as f:
+            f.write(env)
+
+def get_customers_from_api():
+    customers_json = get_customers()
+    
+    if customers_json['paging']['count_items'] > 10:
+        print("There are too many customers to display. In Data folder, you can find the customers.json file.")
+        maped_customer = map_customers(customers_json)
+        save_json(maped_customer, 'customers', 'data')
+        return 0
+    else:
+        user_input = ''
+        while True:
+            print("Customers:")
+            for i, customer in customers_json['customers']:
+                print(f"{i}. {customer['name']}")
+            user_input = input("Select the customer you want to use and enter the corresponding number:")
+            if is_user_input_within_range(user_input, customers_json['customers']) is True:
+                break
+        customer_id = customers_json['customers'][int(user_input) - 1]['id']
+        return customer_id
+
+def get_services_from_api():
+    services_json = get_services()
+    
+    if len(services_json['services']) > 10:
+        print("There are too many services to display. In Data folder, you can find the services.json file.")
+        save_json(services_json, 'services', 'data')
+        return 0
+    else:
+        user_input = ''
+        while True:
+            print("Services:")
+            for i, service in services_json['services']:
+                print(f"{i}. {service['name']}")
+            user_input = input("Select the service you want to use and enter the corresponding number:")
+            if is_user_input_within_range(user_input, services_json['services']) is True:
+                break
+        service_id = services_json['services'][int(user_input) - 1]['id']
+        return service_id
+
+def is_user_input_within_range(input, range):
+    try:
+        int_input = int(input)
+        if int_input < 1 or int_input > len(range):
+            print("Please enter a number within the range.")
+            return False
+        return True
+    except ValueError:
+        print("Please enter a number.")
+        return False
