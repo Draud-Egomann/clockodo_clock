@@ -1,7 +1,7 @@
 from mange_env_service.manage_env import check_env_file, check_env_correctness, incorrect_env_values, env_write_customer_service
 import os
 
-ENV_PATH = os.path.join("configs", ".env")
+ENV_PATH = os.path.join(os.path.dirname(__file__), ".env")
 
 def save_timer_id(timer_id):
     with open('tmp.txt', 'w') as f:
