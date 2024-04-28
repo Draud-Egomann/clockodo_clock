@@ -1,11 +1,12 @@
-from mange_env_service.manage_env import check_env_file, check_env_correctness, incorrect_env_values, env_write_customer_service
+from mange_env_service.manage_env import check_env_correctness, incorrect_env_values, env_write_customer_service
 import os
 
 ENV_PATH = os.path.join(os.path.dirname(__file__), ".env")
 
 def save_timer_id(timer_id):
-    with open('tmp.txt', 'w') as f:
-        f.write(timer_id)
+    #with open('tmp.txt', 'w') as f:
+    #    f.write(timer_id)
+    return
 
 def fill_customers_services(value_matches):
     # if API_KEY, EMAIL and SUBDOMAIN are True, while SERVICES_ID and CUSTOMERS_ID are False
@@ -17,11 +18,6 @@ def fill_customers_services(value_matches):
         return
 
 def main():
-    if not check_env_file(ENV_PATH):
-        print(".env file created. Please fill in the required values and run the script again.")
-        print("If you don't know the ID values of your services and customers, enter API_KEY and EMAIL in the .env file and run the script again.")
-        return
-    
     res = check_env_correctness(ENV_PATH)
     
     # If any of the environment variables are missing or incorrect

@@ -2,27 +2,10 @@ from clockodo_service.customers import get_customers
 from clockodo_service.services import get_services
 from clockodo_mapping_service.mapping import map_customers
 from save_as_json.save_json import save_json
-import os
 import re
 
 def env_values():
     return ['API_KEY', 'EMAIL', 'SUBDOMAIN', 'START_STOP_TIMES', 'SERVICES_ID', 'CUSTOMERS_ID']
-
-def check_env_file(env_path):
-    if not os.path.exists(env_path):
-        print("No .env file for Clockodo API found")
-        create_env_file(env_path)
-        return False
-    return True
-
-def create_env_file(env_path):
-    print("Creating .env file...")
-    os.makedirs(os.path.dirname(env_path), exist_ok=True)
-    with open(env_path, 'w') as f:
-        for value in env_values():
-            f.write(f"{value}=\n")
-    print("The .env file has been created at:", env_path)
-    print("Please fill in the required values.")
 
 def check_env_correctness(env_path):
     with open(env_path, 'r') as f:
