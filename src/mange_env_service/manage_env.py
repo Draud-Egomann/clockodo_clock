@@ -46,7 +46,7 @@ def env_write_customer_service(env_path, data_type, env_variable):
     if data_id != 0:
         with open(env_path, 'r') as f:
             env = f.read()
-            env = re.sub(f'{env_variable}=(\d+)', f'{env_variable}={data_id}', env)
+            env = re.sub(f'{env_variable}=(\\d+)', f'{env_variable}={data_id}', env)
         with open(env_path, 'w') as f:
             f.write(env)
 
