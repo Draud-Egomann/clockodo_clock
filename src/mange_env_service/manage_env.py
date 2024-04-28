@@ -2,33 +2,32 @@ from clockodo_service.customers import get_customers
 from clockodo_service.services import get_services
 from clockodo_mapping_service.mapping import map_json
 from save_as_json.save_json import save_json
+from helper_service.helper import is_user_input_within_range, is_valid_regex
+from decouple import config
 import re
 
 def env_values():
     return ['API_KEY', 'EMAIL', 'SUBDOMAIN', 'START_STOP_TIMES', 'SERVICES_ID', 'CUSTOMERS_ID']
 
-def check_env_correctness(env_path):
-    with open(env_path, 'r') as f:
-        env = f.read()
+def check_env_correctness():
+    api_key = config('API_KEY')
+    email = config('EMAIL')
+    subdomain = config('SUBDOMAIN')
+    start_stop_times = config('START_STOP_TIMES')
+    services_id = config('SERVICES_ID')
+    customers_id = config('CUSTOMERS_ID')
 
-        # Check if all environment variables are present
-        api_key_match = re.search(r'API_KEY=(\w+)', env)
-        email_match = re.search(r'EMAIL=(\w+)', env)
-        subdomain_match = re.search(r'SUBDOMAIN=(\w+)', env)
-        start_stop_times_match = re.search(r'START_STOP_TIMES=\[(\d{2}:\d{2}:\d{2}), (\d{2}:\d{2}:\d{2})\]', env)
-        services_id_match = re.search(r'SERVICES_ID=(\d+)', env)
-        customers_id_match = re.search(r'CUSTOMERS_ID=(\d+)', env)
+    # Validation checks
+    is_api_key_valid = isinstance(api_key, str)
+    is_email_valid = is_valid_regex(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email)
+    is_subdomain_valid = isinstance(subdomain, str)
+    is_start_stop_times_valid = isinstance(start_stop_times, str)
+    is_services_id_valid = isinstance(services_id, str)
+    is_customers_id_valid = isinstance(customers_id, str)
 
-        env_variables = [api_key_match, email_match, subdomain_match, start_stop_times_match, services_id_match, customers_id_match]
-        env_value_matches = []
+    env_value_matches = [is_api_key_valid, is_email_valid, is_subdomain_valid, is_start_stop_times_valid, is_services_id_valid, is_customers_id_valid]
 
-        for env_var in env_variables:
-            if not env_var:
-                env_value_matches.append(False)
-            else:
-                env_value_matches.append(True)
-        
-        return env_value_matches
+    return env_value_matches
 
 def incorrect_env_values(value_matches):
     values = env_values()

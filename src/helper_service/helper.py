@@ -1,3 +1,8 @@
+import re
+
+def is_valid_regex(pattern, string):
+    return re.match(pattern, string) is not None
+
 def is_user_input_within_range(user_input, data_list):
     try:
         int_input = int(user_input)
