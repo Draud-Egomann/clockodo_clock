@@ -13,7 +13,8 @@ def fill_customers_services(value_matches):
     if value_matches[0] and value_matches[1] and value_matches[2] and not value_matches[4] and not value_matches[5]:
         user_input = input("Do you want to make a request to the Clockodo API to get the ID values of your services and customers? (y/n)")
         if user_input.lower() == 'y':
-            env_write_customer_service(ENV_PATH)
+            env_write_customer_service(ENV_PATH, "customers", "CUSTOMERS_ID")
+            env_write_customer_service(ENV_PATH, "services", "SERVICES_ID")
             print("Request to the Clockodo API made successfully.")
         return
 
