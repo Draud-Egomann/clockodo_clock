@@ -9,22 +9,18 @@ def env_values():
     return ['API_KEY', 'EMAIL', 'SUBDOMAIN', 'START_STOP_TIMES', 'SERVICES_ID', 'CUSTOMERS_ID']
 
 def check_env_correctness():
-    api_key = config('API_KEY')
-    email = config('EMAIL')
-    subdomain = config('SUBDOMAIN')
-    start_stop_times = config('START_STOP_TIMES')
-    services_id = config('SERVICES_ID')
-    customers_id = config('CUSTOMERS_ID')
+    env_values_list = [config(value) for value in env_values()]
 
     # Validation checks
-    is_api_key_valid = isinstance(api_key, str)
-    is_email_valid = is_valid_regex(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email)
-    is_subdomain_valid = isinstance(subdomain, str)
-    is_start_stop_times_valid = isinstance(start_stop_times, str)
-    is_services_id_valid = isinstance(services_id, str)
-    is_customers_id_valid = isinstance(customers_id, str)
-
-    env_value_matches = [is_api_key_valid, is_email_valid, is_subdomain_valid, is_start_stop_times_valid, is_services_id_valid, is_customers_id_valid]
+    regex_email = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    env_value_matches = [
+        isinstance(env_values_list[0], str),
+        is_valid_regex(regex_email, env_values_list[1]),
+        isinstance(env_values_list[2], str),
+        isinstance(env_values_list[3], str),
+        isinstance(env_values_list[4], str),
+        isinstance(env_values_list[5], str)
+    ]
 
     return env_value_matches
 
