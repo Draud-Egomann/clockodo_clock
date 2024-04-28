@@ -1,12 +1,8 @@
 from mange_env_service.manage_env import check_env_correctness, incorrect_env_values, env_write_customer_service
+from clockodo_service.clock import clock
 import os
 
 ENV_PATH = os.path.join(os.path.dirname(__file__), ".env")
-
-def save_timer_id(timer_id):
-    #with open('tmp.txt', 'w') as f:
-    #    f.write(timer_id)
-    return
 
 def fill_customers_services(value_matches):
     # if API_KEY, EMAIL and SUBDOMAIN are True, while SERVICES_ID and CUSTOMERS_ID are False
@@ -15,7 +11,6 @@ def fill_customers_services(value_matches):
         if user_input.lower() == 'y':
             env_write_customer_service(ENV_PATH, "customers", "CUSTOMERS_ID")
             env_write_customer_service(ENV_PATH, "services", "SERVICES_ID")
-            print("Request to the Clockodo API made successfully.")
         return
 
 def main():
@@ -25,12 +20,11 @@ def main():
     if not all(res):
         incorrect_env_values(res)
         fill_customers_services(res)
+        return
 
     # Your main logic here
+    clock()
 
-    # Simulating script ending prematurely
-    timer_id = 'your_timer_id=[123456]'
-    save_timer_id(timer_id)
 
 if __name__ == "__main__":
     main()
