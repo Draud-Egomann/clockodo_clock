@@ -1,4 +1,4 @@
-from helper_service.helper import save_json
+from helper_service.helper import save_json, randomize_schedule_time
 from clockodo_mapping_service.mapping import map_timer_json
 from decouple import config
 import requests
@@ -14,6 +14,7 @@ SUBDOMAIN = config('SUBDOMAIN')
 START_STOP_TIMES = config('START_STOP_TIMES')
 SERVICES_ID = config('SERVICES_ID')
 CUSTOMERS_ID = config('CUSTOMERS_ID')
+RANDOM_CLOCKING_IN = config('RANDOM_CLOCKING_IN')
 
 start_timer_url = f"https://{SUBDOMAIN}.clockodo.com/api/v2/clock"
 
@@ -91,6 +92,9 @@ def clock():
         current_time = datetime.datetime.now().time()
 
         for start_time, stop_time in schedules:
+            if RANDOM_CLOCKING_IN == "True":
+                start_time, stop_time = randomize_schedule_time(start_time, stop_time)
+
             start_datetime = datetime.datetime.strptime(start_time, "%H:%M:%S").time()
             stop_datetime = datetime.datetime.strptime(stop_time, "%H:%M:%S").time()
             

@@ -1,6 +1,23 @@
 import re
 import os
 import json
+import datetime
+import random
+
+def randomize_schedule_time(start_time, stop_time):
+    # Convert string time to datetime objects
+    start_time_obj = datetime.datetime.strptime(start_time, "%H:%M:%S")
+    stop_time_obj = datetime.datetime.strptime(stop_time, "%H:%M:%S")
+     
+    # Add random seconds to start and stop time
+    randomized_start_time = start_time_obj + datetime.timedelta(seconds=random.randint(1, 300))
+    randomized_stop_time = stop_time_obj + datetime.timedelta(seconds=random.randint(1, 300))
+    
+    # Format the result as string in "HH:MM:SS" format
+    randomized_start_time_str = randomized_start_time.strftime("%H:%M:%S")
+    randomized_stop_time_str = randomized_stop_time.strftime("%H:%M:%S")
+    
+    return randomized_start_time_str, randomized_stop_time_str
 
 def save_json(data, file_name, path=""):
     with open(os.path.join(path, file_name + ".json"), 'w', encoding='utf-8') as f:
