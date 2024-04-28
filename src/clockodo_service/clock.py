@@ -2,6 +2,9 @@ from helper_service.helper import save_json
 from clockodo_mapping_service.mapping import map_timer_json
 from decouple import config
 import requests
+import datetime
+import atexit
+import time
 import json
 
 # load data from .env-file
@@ -80,3 +83,37 @@ def stop_timer():
     else:
         print(f"Error stopping timer. Status code: {response.status_code}")
         print(response.text)
+
+def clock():
+    schedules = eval(START_STOP_TIMES)
+
+    while True:
+        current_time = datetime.datetime.now().time()
+
+        for start_time, stop_time in schedules:
+            start_datetime = datetime.datetime.strptime(start_time, "%H:%M:%S").time()
+            stop_datetime = datetime.datetime.strptime(stop_time, "%H:%M:%S").time()
+            
+            # if the current time is in schedule, start the timer
+            if start_datetime <= current_time <= stop_datetime:
+
+                # only start the timer if it is not already running
+                if get_current_timer_id() == 0:
+                    start_timer()
+
+                # loop until the stop time is reached
+                while current_time < stop_datetime:
+                    current_time = datetime.datetime.now().time()
+                    time.sleep(60)  # check every 60 seconds if the stop time is reached
+
+                # stop the timer only if it is running
+                if get_current_timer_id() != 0:
+                    stop_timer()
+
+def on_exit():
+    # stop the timer only if it is running
+    if get_current_timer_id() != 0:
+        stop_timer()
+
+# register exit-hook
+atexit.register(on_exit)
