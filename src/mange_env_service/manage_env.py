@@ -1,8 +1,7 @@
 from clockodo_service.customers import get_customers
 from clockodo_service.services import get_services
 from clockodo_mapping_service.mapping import map_json
-from save_as_json.save_json import save_json
-from helper_service.helper import is_user_input_within_range, is_valid_regex
+from helper_service.helper import save_json, is_user_input_within_range, is_valid_regex
 from decouple import config
 import re
 
