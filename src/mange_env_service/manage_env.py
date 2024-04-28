@@ -1,6 +1,6 @@
 from clockodo_service.customers import get_customers
 from clockodo_service.services import get_services
-from clockodo_mapping_service.mapping import map_customers
+from clockodo_mapping_service.mapping import map_json
 from save_as_json.save_json import save_json
 import re
 
@@ -64,7 +64,7 @@ def get_customers_from_api():
     
     if customers_json['paging']['count_items'] > 10:
         print("There are too many customers to display. In Data folder, you can find the customers.json file.")
-        maped_customer = map_customers(customers_json)
+        maped_customer = map_json(customers_json["customers"])
         save_json(maped_customer, 'customers', 'data')
         return 0
     else:

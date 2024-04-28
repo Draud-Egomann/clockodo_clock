@@ -1,10 +1,8 @@
-def map_customers(customers):
-    return {
-        "customers": [
-            {
-                "id": customer["id"],
-                "name": customer["name"]
-            }
-            for customer in customers["customers"]
-        ]
-    }
+def map_json(clockodo_json):
+    return [
+        {
+            "id": item["id"],
+            "name": item["name"]
+        }
+        for item in clockodo_json
+    ]
