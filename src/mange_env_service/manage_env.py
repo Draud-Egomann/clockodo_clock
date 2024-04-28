@@ -61,28 +61,29 @@ def env_write_customer_service(env_path):
 
 def get_customers_from_api():
     customers_json = get_customers()
+    customers_json = map_json(customers_json["customers"])
     
-    if customers_json['paging']['count_items'] > 10:
+    if len(customers_json) > 10:
         print("There are too many customers to display. In Data folder, you can find the customers.json file.")
-        maped_customer = map_json(customers_json["customers"])
-        save_json(maped_customer, 'customers', 'data')
+        save_json(customers_json, 'customers', 'data')
         return 0
     else:
         user_input = ''
         while True:
             print("Customers:")
-            for i, customer in customers_json['customers']:
+            for i, customer in customers_json:
                 print(f"{i}. {customer['name']}")
             user_input = input("Select the customer you want to use and enter the corresponding number:")
-            if is_user_input_within_range(user_input, customers_json['customers']) is True:
+            if is_user_input_within_range(user_input, customers_json) is True:
                 break
-        customer_id = customers_json['customers'][int(user_input) - 1]['id']
+        customer_id = customers_json[int(user_input) - 1]['id']
         return customer_id
 
 def get_services_from_api():
     services_json = get_services()
+    services_json = map_json(services_json["services"])
     
-    if len(services_json['services']) > 10:
+    if len(services_json) > 10:
         print("There are too many services to display. In Data folder, you can find the services.json file.")
         save_json(services_json, 'services', 'data')
         return 0
@@ -90,12 +91,12 @@ def get_services_from_api():
         user_input = ''
         while True:
             print("Services:")
-            for i, service in services_json['services']:
+            for i, service in services_json:
                 print(f"{i}. {service['name']}")
             user_input = input("Select the service you want to use and enter the corresponding number:")
-            if is_user_input_within_range(user_input, services_json['services']) is True:
+            if is_user_input_within_range(user_input, services_json) is True:
                 break
-        service_id = services_json['services'][int(user_input) - 1]['id']
+        service_id = services_json[int(user_input) - 1]['id']
         return service_id
 
 def is_user_input_within_range(input, range):
