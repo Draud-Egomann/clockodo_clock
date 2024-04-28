@@ -19,7 +19,7 @@ def fill_customers_services(value_matches):
         return
 
 def main():
-    res = check_env_correctness(ENV_PATH)
+    res = check_env_correctness()
     
     # If any of the environment variables are missing or incorrect
     if not all(res):
