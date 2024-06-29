@@ -4,12 +4,30 @@ import json
 import datetime
 import random
 
+def convert_seconds_to_hhmmss(seconds_diff):
+    hours, remainder = divmod(seconds_diff, 3600)
+    minutes, seconds = divmod(remainder, 60)
+
+    return int(hours), int(minutes), int(seconds)
+
+def get_sleep_statement(hours, minutes, seconds):
+    parts = []
+
+    if hours > 0:
+        parts.append(f"{hours} hours")
+    if minutes > 0:
+        parts.append(f"{minutes} minutes")
+    
+    parts.append(f"and {seconds} seconds")
+
+    return "Sleeping for " + ", ".join(parts) + "."
+
 def randomize_schedule_time(start_time, stop_time):
     # Convert string time to datetime objects
     start_time_obj = datetime.datetime.strptime(start_time, "%H:%M:%S")
     stop_time_obj = datetime.datetime.strptime(stop_time, "%H:%M:%S")
      
-    # Add random seconds to start and stop time
+    # Add random seconds (up to 5 minutes) to the start and stop time
     randomized_start_time = start_time_obj + datetime.timedelta(seconds=random.randint(1, 300))
     randomized_stop_time = stop_time_obj + datetime.timedelta(seconds=random.randint(1, 300))
     

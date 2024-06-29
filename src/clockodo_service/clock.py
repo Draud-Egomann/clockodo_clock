@@ -1,5 +1,6 @@
 from helper_service.helper import save_json, randomize_schedule_time
 from clockodo_mapping_service.mapping import map_timer_json
+from helper_service.helper import convert_seconds_to_hhmmss, get_sleep_statement
 from decouple import config
 import requests
 import datetime
@@ -90,6 +91,7 @@ def clock():
 
     while True:
         current_time = datetime.datetime.now().time()
+        min_time_diff = float('inf')
 
         for start_time, stop_time in schedules:
             if RANDOM_CLOCKING_IN == "True":
@@ -97,8 +99,9 @@ def clock():
 
             start_datetime = datetime.datetime.strptime(start_time, "%H:%M:%S").time()
             stop_datetime = datetime.datetime.strptime(stop_time, "%H:%M:%S").time()
-            
-            # if the current time is in schedule, start the timer
+
+            print(start_datetime, stop_datetime, current_time)
+
             if start_datetime <= current_time <= stop_datetime:
 
                 # only start the timer if it is not already running
@@ -108,11 +111,28 @@ def clock():
                 # loop until the stop time is reached
                 while current_time < stop_datetime:
                     current_time = datetime.datetime.now().time()
-                    time.sleep(60)  # check every 60 seconds if the stop time is reached
+                    time.sleep(60)
 
                 # stop the timer only if it is running
                 if get_current_timer_id() != 0:
                     stop_timer()
+            else:
+                current_datetime = datetime.datetime.combine(datetime.date.today(), current_time)
+                next_start_datetime = datetime.datetime.combine(datetime.date.today(), start_datetime)
+
+                if current_datetime > next_start_datetime:
+                    next_start_datetime += datetime.timedelta(days=1)
+
+                time_diff_seconds = (next_start_datetime - current_datetime).total_seconds()
+                min_time_diff = min(min_time_diff, time_diff_seconds)
+
+        hours, minutes, seconds = convert_seconds_to_hhmmss(min_time_diff)
+        sleep_statement = get_sleep_statement(hours, minutes, seconds)
+
+        print(sleep_statement)
+
+        # Sleep until the next schedule starts, or a safe default (e.g., 60 seconds)
+        time.sleep(min_time_diff if min_time_diff != float('inf') else 60)
 
 def on_exit():
     # stop the timer only if it is running
