@@ -41,11 +41,3 @@ def get_customers():
     if customers != 0:
         print("Customers successfully retrieved.")
     return customers
-    
-def get_customer(customer_id):
-    url = start_timer_url + f"/{customer_id}"
-    customer = retrieve_data(url)
-
-    if customer != 0:
-        print("Customer successfully retrieved.")
-    return customer

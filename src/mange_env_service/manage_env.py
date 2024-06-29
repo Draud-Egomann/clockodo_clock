@@ -1,5 +1,5 @@
-from clockodo_service.customers import get_customers
-from clockodo_service.services import get_services
+from clockodo_service.customers_api import get_customers
+from clockodo_service.services_api import get_services
 from clockodo_mapping_service.mapping import map_json
 from helper_service.helper import save_json, is_user_input_within_range, is_valid_regex
 from decouple import config
