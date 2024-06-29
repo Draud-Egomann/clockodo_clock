@@ -1,6 +1,6 @@
 from helper_service.helper import save_json, randomize_schedule_time
 from clockodo_mapping_service.mapping import map_timer_json
-from helper_service.helper import calculate_sleep_time, convert_seconds_to_hhmmss, get_sleep_statement
+from helper_service.helper import calculate_sleep_time, convert_seconds_to_hhmmss, get_sleep_statement, is_today_a_working_day
 from decouple import config
 import requests
 import datetime
@@ -12,10 +12,11 @@ import json
 API_KEY = config('API_KEY')
 EMAIL = config('EMAIL')
 SUBDOMAIN = config('SUBDOMAIN')
-START_STOP_TIMES = config('START_STOP_TIMES')
+SCHEDULES = config('SCHEDULES')
 SERVICES_ID = config('SERVICES_ID')
 CUSTOMERS_ID = config('CUSTOMERS_ID')
-RANDOM_CLOCKING_IN = config('RANDOM_CLOCKING_IN')
+VARIABLE_CLOCKING_IN = config('VARIABLE_CLOCKING_IN')
+WORKING_DAYS = config('WORKING_DAYS')
 
 start_timer_url = f"https://{SUBDOMAIN}.clockodo.com/api/v2/clock"
 
@@ -113,20 +114,23 @@ def clock():
 
     This function loops indefinitely, checking current time against scheduled times and managing the timer based on these times.
     """
-    schedules = eval(START_STOP_TIMES)
+    schedules = eval(SCHEDULES)
 
     while True:
+        if not is_today_a_working_day(WORKING_DAYS):
+            print("Today is not a working day. Sleeping until tomorrow.")
+            time.sleep(86400)  # Sleep for one day
+            continue
+
         current_time = datetime.datetime.now().time()
         min_time_diff = float('inf')
 
         for start_time, stop_time in schedules:
-            if RANDOM_CLOCKING_IN == "True":
+            if VARIABLE_CLOCKING_IN == "True":
                 start_time, stop_time = randomize_schedule_time(start_time, stop_time)
 
             start_datetime = datetime.datetime.strptime(start_time, "%H:%M:%S").time()
             stop_datetime = datetime.datetime.strptime(stop_time, "%H:%M:%S").time()
-
-            print(start_datetime, stop_datetime, current_time)
 
             if start_datetime <= current_time <= stop_datetime:
 

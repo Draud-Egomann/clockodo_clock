@@ -1,6 +1,5 @@
-from xmlrpc.client import Boolean
-from clockodo_service.customers import get_customers
-from clockodo_service.services import get_services
+from clockodo_service.customers_api import get_customers
+from clockodo_service.services_api import get_services
 from clockodo_mapping_service.mapping import map_json
 from helper_service.helper import save_json, is_user_input_within_range, is_valid_regex
 from decouple import config
@@ -13,7 +12,7 @@ def env_values():
     Returns:
     list: A list of strings representing the keys of necessary environment variables.
     """
-    return ['API_KEY', 'EMAIL', 'SUBDOMAIN', 'START_STOP_TIMES', 'SERVICES_ID', 'CUSTOMERS_ID', "RANDOM_CLOCKING_IN"]
+    return ['API_KEY', 'EMAIL', 'SUBDOMAIN', 'SERVICES_ID', 'CUSTOMERS_ID', "VARIABLE_CLOCKING_IN", "WORKING_DAYS", 'SCHEDULES']
 
 def check_env_correctness():
     """
@@ -30,15 +29,20 @@ def check_env_correctness():
 
     # Validation checks
     regex_email = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    regex_value_0 = r'^[1-9]\d*$'
     regex_clocking_in = r'^(True|False)$'
+    regex_working_days = r'^\["(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)"(?:,\s*"(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)")*\]$'
+    regex_schedule = r'^\[\("(\d{2}:\d{2}:\d{2})", "(\d{2}:\d{2}:\d{2})"\)(?:, \("(\d{2}:\d{2}:\d{2})", "(\d{2}:\d{2}:\d{2})"\))*\]$'
+
     env_value_matches = [
         isinstance(env_values_list[0], str),
         is_valid_regex(regex_email, env_values_list[1]),
         isinstance(env_values_list[2], str),
-        isinstance(env_values_list[3], str),
-        isinstance(env_values_list[4], str),
-        isinstance(env_values_list[5], str),
-        is_valid_regex(regex_clocking_in, env_values_list[6])
+        is_valid_regex(regex_value_0, env_values_list[3]),
+        is_valid_regex(regex_value_0, env_values_list[4]),
+        is_valid_regex(regex_clocking_in, env_values_list[5]),
+        is_valid_regex(regex_working_days, env_values_list[6]),
+        is_valid_regex(regex_schedule, env_values_list[7])
     ]
 
     return env_value_matches

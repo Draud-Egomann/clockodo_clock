@@ -7,7 +7,7 @@ EMAIL = config('EMAIL')
 SUBDOMAIN = config('SUBDOMAIN')
 
 # https://www.clockodo.com/en/api/customers/
-start_timer_url = f"https://{SUBDOMAIN}.clockodo.com/api/v2/customers"
+start_timer_url = f"https://{SUBDOMAIN}.clockodo.com/api/v2/services"
 
 # define header for request
 headers = {
@@ -44,25 +44,17 @@ def retrieve_data(url):
         print(f"Error retrieving data from {url}. Status code: {response.status_code}")
         print(response.text)
         return 0
-
-def get_customers():
+    
+def get_services():
     """
-    Fetches the list of customers from the Clockodo API.
+    Fetches the list of services from the Clockodo API.
 
     Returns:
-    dict: A JSON object containing the list of customers if the API request is successful.
+    dict: A JSON object containing the list of services if the API request is successful.
     int: Returns 0 if the API request fails.
     """
-    customers = retrieve_data(start_timer_url)
+    services = retrieve_data(start_timer_url)
 
-    if customers != 0:
-        print("Customers successfully retrieved.")
-    return customers
-    
-def get_customer(customer_id):
-    url = start_timer_url + f"/{customer_id}"
-    customer = retrieve_data(url)
-
-    if customer != 0:
-        print("Customer successfully retrieved.")
-    return customer
+    if services != 0:
+        print("Services successfully retrieved.")
+    return services
