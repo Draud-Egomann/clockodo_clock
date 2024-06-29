@@ -6,7 +6,7 @@ from decouple import config
 import re
 
 def env_values():
-    return ['API_KEY', 'EMAIL', 'SUBDOMAIN', 'SERVICES_ID', 'CUSTOMERS_ID', "RANDOM_CLOCKING_IN", "WORKING_DAYS", 'START_STOP_TIMES']
+    return ['API_KEY', 'EMAIL', 'SUBDOMAIN', 'SERVICES_ID', 'CUSTOMERS_ID', "VARIABLE_CLOCKING_IN", "WORKING_DAYS", 'SCHEDULES']
 
 def check_env_correctness():
     env_values_list = [config(value) for value in env_values()]

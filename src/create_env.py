@@ -12,9 +12,9 @@ EMAIL=your_email_here
 SUBDOMAIN=my
 SERVICES_ID=0
 CUSTOMERS_ID=0
-RANDOM_CLOCKING_IN=True
+VARIABLE_CLOCKING_IN=True
 WORKING_DAYS=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-START_STOP_TIMES=[("08:00:00", "12:00:00"), ("13:00:00", "17:00:00")]"""
+SCHEDULES=[("08:00:00", "12:00:00"), ("13:00:00", "17:00:00")]"""
 
     with open(env_path, 'w') as file:
         file.write(env_content)
