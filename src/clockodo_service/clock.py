@@ -12,10 +12,10 @@ import json
 API_KEY = config('API_KEY')
 EMAIL = config('EMAIL')
 SUBDOMAIN = config('SUBDOMAIN')
-START_STOP_TIMES = config('START_STOP_TIMES')
+SCHEDULES = config('SCHEDULES')
 SERVICES_ID = config('SERVICES_ID')
 CUSTOMERS_ID = config('CUSTOMERS_ID')
-RANDOM_CLOCKING_IN = config('RANDOM_CLOCKING_IN')
+VARIABLE_CLOCKING_IN = config('VARIABLE_CLOCKING_IN')
 WORKING_DAYS = config('WORKING_DAYS')
 
 start_timer_url = f"https://{SUBDOMAIN}.clockodo.com/api/v2/clock"
@@ -88,7 +88,7 @@ def stop_timer():
         print(response.text)
 
 def clock():
-    schedules = eval(START_STOP_TIMES)
+    schedules = eval(SCHEDULES)
 
     while True:
         if not is_today_a_working_day(WORKING_DAYS):
@@ -100,7 +100,7 @@ def clock():
         min_time_diff = float('inf')
 
         for start_time, stop_time in schedules:
-            if RANDOM_CLOCKING_IN == "True":
+            if VARIABLE_CLOCKING_IN == "True":
                 start_time, stop_time = randomize_schedule_time(start_time, stop_time)
 
             start_datetime = datetime.datetime.strptime(start_time, "%H:%M:%S").time()
