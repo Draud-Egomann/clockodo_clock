@@ -52,6 +52,8 @@ python ./main.py
 
 The program will check the correctness of the `.env` variables and prompt you to fill in missing service and customer IDs via the Clockodo API if they are set to 0.
 
+- If the program is directly called from the `src` directory, it will create an `data` folder in the `src` directory.
+
 ## Contributing
 
 Contributions to this project are welcome. Please fork the repository and submit a pull request with your enhancements.
