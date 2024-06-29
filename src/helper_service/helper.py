@@ -4,6 +4,16 @@ import json
 import datetime
 import random
 
+def calculate_sleep_time(current_time, event_time):
+    current_datetime = datetime.datetime.combine(datetime.date.today(), current_time)
+    event_datetime = datetime.datetime.combine(datetime.date.today(), event_time)
+
+    if current_datetime > event_datetime:
+        event_datetime += datetime.timedelta(days=1)
+
+    time_diff_seconds = (event_datetime - current_datetime).total_seconds()
+    return time_diff_seconds
+
 def convert_seconds_to_hhmmss(seconds_diff):
     hours, remainder = divmod(seconds_diff, 3600)
     minutes, seconds = divmod(remainder, 60)
