@@ -16,12 +16,6 @@ headers = {
     "X-Clockodo-External-Application": f"Clockodo;{EMAIL}"
 }
 
-def env_values_set():
-    if not all([API_KEY, EMAIL, SUBDOMAIN]):
-        print("Please fill in the required values in the .env file.")
-        return False
-    return True
-
 def retrieve_data(url):
     """
     Retrieves data from the API URL
@@ -33,9 +27,6 @@ def retrieve_data(url):
     dict: A clockodo JSON object if the request was successful.
     int: 0 if there was an error or the request fails.
     """
-    # if any of the environment variables is empty
-    if env_values_set() is False:
-        return 0
 
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
