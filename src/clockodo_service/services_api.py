@@ -41,14 +41,3 @@ def get_services():
     if services != 0:
         print("Services successfully retrieved.")
     return services
-
-def get_service(service_id):
-    url = start_timer_url + f"/{service_id}"
-    service = retrieve_data(url)
-
-    if service != 0:
-        print("Service successfully retrieved.")
-    return service
-
-if __name__ == '__main__':
-    print(get_services())
