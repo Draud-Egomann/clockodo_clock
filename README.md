@@ -21,9 +21,9 @@ EMAIL = your_email_here
 SUBDOMAIN = your_subdomain_here (default: my)
 SERVICES_ID = your_services_id_here (set to 0 if unknown)
 CUSTOMERS_ID = your_customers_id_here (set to 0 if unknown)
-RANDOM_CLOCKING_IN = True or False
+VARIABLE_CLOCKING_IN = True or False
 WORKING_DAYS = ["Monday", "Tuesday", ..., "Sunday"]
-START_STOP_TIMES = [("08:00:00", "12:00:00"), ("13:00:00", "17:00:00")]
+SCHEDULES = [("08:00:00", "12:00:00"), ("13:00:00", "17:00:00")]
 ```
 
 Alternatively, you can run the `src/create_env.py` script to generate a `.env` file with the necessary variables. The script will prompt you to fill in the missing values.
