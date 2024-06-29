@@ -27,6 +27,12 @@ headers = {
 }
 
 def get_current_timer_id():
+    """
+    Retrieves the current timer Id from the temporary JSON file.
+
+    Returns:
+    int: The current timer Id if available, or 0 not.
+    """
     # Load data from JSON file
     try:
         with open('data/tmp.json', 'r') as file:
@@ -38,12 +44,21 @@ def get_current_timer_id():
     return data.get('your_timer_id')
 
 def reset_current_timer_id():
+    """
+    Resets the current timer Id to 0.
+    """
     data = get_current_timer_id()
 
     data = map_timer_json(0)
     save_json(data, 'tmp', 'data')
 
 def save_current_timer_id():
+    """
+    Gets the current running timer from the API and saves its Id locally.
+
+    Returns:
+    int or None: Returns None if successful, or 0 if the request failed.
+    """
     response = requests.get(start_timer_url, headers=headers)
 
     if response.status_code == 200:
@@ -57,6 +72,9 @@ def save_current_timer_id():
 
 # POST request to start the timer
 def start_timer():
+    """
+    Starts a timer through a POST request to the API and saves the timer Id locally.
+    """
     data = {
         'services_id': SERVICES_ID,
         'customers_id': CUSTOMERS_ID,
@@ -72,6 +90,9 @@ def start_timer():
 
 # POST request to stop the current timer
 def stop_timer():
+    """
+    Stops the current timer through a DELETE request to the API.
+    """
     timer_id = get_current_timer_id() # get the current timer id
 
     if timer_id == 0:
@@ -87,6 +108,11 @@ def stop_timer():
         print(response.text)
 
 def clock():
+    """
+    Controls the clocking behavior based on predefined start and stop times, handling timer start and stop accordingly.
+
+    This function loops indefinitely, checking current time against scheduled times and managing the timer based on these times.
+    """
     schedules = eval(START_STOP_TIMES)
 
     while True:
@@ -134,6 +160,9 @@ def clock():
         time.sleep(min_time_diff if min_time_diff != float('inf') else 60)
 
 def on_exit():
+    """
+    Ensures the timer is stopped when the script exits. Registered with atexit to trigger on script termination.
+    """
     # stop the timer only if it is running
     if get_current_timer_id() != 0:
         stop_timer()
