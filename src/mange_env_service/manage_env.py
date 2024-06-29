@@ -13,6 +13,7 @@ def check_env_correctness():
 
     # Validation checks
     regex_email = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    regex_value_0 = r'^[1-9]\d*$'
     regex_clocking_in = r'^(True|False)$'
     regex_working_days = r'^\["(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)"(?:,\s*"(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)")*\]$'
 
@@ -21,8 +22,8 @@ def check_env_correctness():
         is_valid_regex(regex_email, env_values_list[1]),
         isinstance(env_values_list[2], str),
         isinstance(env_values_list[3], str),
-        isinstance(env_values_list[4], str),
-        isinstance(env_values_list[5], str),
+        is_valid_regex(regex_value_0, env_values_list[4]),
+        is_valid_regex(regex_value_0, env_values_list[5]),
         is_valid_regex(regex_clocking_in, env_values_list[6]),
         is_valid_regex(regex_working_days, env_values_list[7])
     ]
