@@ -100,8 +100,6 @@ def clock():
             start_datetime = datetime.datetime.strptime(start_time, "%H:%M:%S").time()
             stop_datetime = datetime.datetime.strptime(stop_time, "%H:%M:%S").time()
 
-            print(start_datetime, stop_datetime, current_time)
-
             if start_datetime <= current_time <= stop_datetime:
 
                 # only start the timer if it is not already running
