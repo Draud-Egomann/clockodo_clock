@@ -124,10 +124,10 @@ def create_folder(path):
     """
     Creates a directory at the path if it does not already exist.
     """
-    if not os.path.exists(path):
+    if not is_folder_existent(path):
         os.makedirs(path)
 
-def is_folder_existant(path):
+def is_folder_existent(path):
     """
     Checks if a folder exists and returns True if it does, False otherwise.
     """
