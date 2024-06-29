@@ -38,8 +38,17 @@ def randomize_schedule_time(start_time, stop_time):
     return randomized_start_time_str, randomized_stop_time_str
 
 def save_json(data, file_name, path=""):
+    create_folder(path)
+
     with open(os.path.join(path, file_name + ".json"), 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
+
+def create_folder(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+def is_folder_existant(path):
+    return os.path.exists(path)
 
 def is_valid_regex(pattern, string):
     return re.match(pattern, string) is not None
