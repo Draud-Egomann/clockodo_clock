@@ -73,3 +73,7 @@ def is_user_input_within_range(user_input, data_list):
     except ValueError:
         print("Please enter a number.")
         return False
+
+def is_today_a_working_day(working_days):
+    today = datetime.datetime.today().strftime('%A')  # Gets today's day as a string, e.g. "Monday"
+    return today in working_days
