@@ -1,4 +1,4 @@
-from mange_env_service.manage_env import check_env_correctness, incorrect_env_values, env_write_customer_service
+from manage_env_service.manage_env import check_env_correctness, incorrect_env_values, env_write_customer_service
 from clockodo_service.clock import clock
 import os
 
